@@ -45,7 +45,10 @@ model User {
   wallet       Wallet?
   transactions Transaction[]
   apiKeys      ApiKey[]
-  auditLogs    AuditLog[]
+  auditLogs      AuditLog[]
+  tickets        Ticket[]
+  ticketMessages TicketMessage[]
+  refillRequests RefillRequest[]
 
   @@index([email])
   @@index([role])
@@ -191,4 +194,72 @@ model AuditLog {
   @@index([userId])
   @@index([entity])
   @@index([createdAt])
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Ticket {
+  id        String         @id @default(cuid())
+  userId    String
+  subject   String
+  status    TicketStatus   @default(OPEN)
+  priority  TicketPriority @default(MEDIUM)
+  orderId   String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  user     User            @relation(fields: [userId], references: [id])
+  messages TicketMessage[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model TicketMessage {
+  id        String   @id @default(cuid())
+  ticketId  String
+  userId    String
+  message   String   @db.Text
+  isAdmin   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([ticketId])
+}
+
+model RefillRequest {
+  id        String   @id @default(cuid())
+  userId    String
+  orderId   String
+  status    String   @default("PENDING")
+  reason    String?
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id])
+  order Order @relation(fields: [orderId], references: [id])
+
+  @@index([userId])
+  @@index([orderId])
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@index([email])
 }
