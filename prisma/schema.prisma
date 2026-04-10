@@ -1,0 +1,194 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL")   // same for local; on Vercel use the direct URL here
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  PARTIAL
+  CANCELLED
+}
+
+enum TransactionType {
+  DEPOSIT
+  ORDER_PAYMENT
+  REFUND
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String?
+  name         String?
+  image        String?
+  role         Role          @default(USER)
+  emailVerified DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  accounts     Account[]
+  sessions     Session[]
+  orders       Order[]
+  wallet       Wallet?
+  transactions Transaction[]
+  apiKeys      ApiKey[]
+  auditLogs    AuditLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  category    String
+  description String   @db.Text
+  rate        Float    // price per 1000 units
+  minQuantity Int
+  maxQuantity Int
+  isActive    Boolean  @default(true)
+  popularity  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orders Order[]
+
+  @@index([category])
+  @@index([isActive])
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  userId         String
+  serviceId      String
+  quantity       Int
+  targetUsername String
+  totalPrice     Float
+  status         OrderStatus @default(PENDING)
+  notes          String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  service      Service       @relation(fields: [serviceId], references: [id])
+  transactions Transaction[]
+
+  @@index([userId])
+  @@index([serviceId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  balance   Float    @default(0)
+  currency  String   @default("USD")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String
+  orderId         String?
+  type            TransactionType
+  amount          Float
+  currency        String          @default("USD")
+  stripePaymentId String?
+  description     String
+  createdAt       DateTime        @default(now())
+
+  user  User   @relation(fields: [userId], references: [id])
+  order Order? @relation(fields: [orderId], references: [id])
+
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  userId    String
+  key       String    @unique
+  name      String
+  lastUsed  DateTime?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([key])
+  @@index([userId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  entity    String
+  entityId  String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
+}
