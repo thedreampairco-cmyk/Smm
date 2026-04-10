@@ -1,12 +1,10 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DATABASE_URL")   // same for local; on Vercel use the direct URL here
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -28,24 +26,37 @@ enum TransactionType {
   REFUND
 }
 
-model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  passwordHash String?
-  name         String?
-  image        String?
-  role         Role          @default(USER)
-  emailVerified DateTime?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
 
-  accounts     Account[]
-  sessions     Session[]
-  orders       Order[]
-  wallet       Wallet?
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String?
+  name          String?
+  image         String?
+  role          Role      @default(USER)
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  orders         Order[]
+  wallet         Wallet?
   transactions   Transaction[]
-  refillRequests RefillRequest[]
-  apiKeys      ApiKey[]
+  apiKeys        ApiKey[]
   auditLogs      AuditLog[]
   tickets        Ticket[]
   ticketMessages TicketMessage[]
@@ -98,7 +109,7 @@ model Service {
   name        String
   category    String
   description String   @db.Text
-  rate        Float    // price per 1000 units
+  rate        Float
   minQuantity Int
   maxQuantity Int
   isActive    Boolean  @default(true)
@@ -124,8 +135,8 @@ model Order {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
-  user         User          @relation(fields: [userId], references: [id])
-  service      Service       @relation(fields: [serviceId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+  service        Service         @relation(fields: [serviceId], references: [id])
   transactions   Transaction[]
   refillRequests RefillRequest[]
 
@@ -139,7 +150,7 @@ model Wallet {
   id        String   @id @default(cuid())
   userId    String   @unique
   balance   Float    @default(0)
-  currency  String   @default("USD")
+  currency  String   @default("INR")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -154,7 +165,7 @@ model Transaction {
   orderId         String?
   type            TransactionType
   amount          Float
-  currency        String          @default("USD")
+  currency        String          @default("INR")
   stripePaymentId String?
   description     String
   createdAt       DateTime        @default(now())
@@ -196,20 +207,6 @@ model AuditLog {
   @@index([userId])
   @@index([entity])
   @@index([createdAt])
-}
-
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  RESOLVED
-  CLOSED
-}
-
-enum TicketPriority {
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
 }
 
 model Ticket {
