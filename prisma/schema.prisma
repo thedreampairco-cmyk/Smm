@@ -43,7 +43,8 @@ model User {
   sessions     Session[]
   orders       Order[]
   wallet       Wallet?
-  transactions Transaction[]
+  transactions   Transaction[]
+  refillRequests RefillRequest[]
   apiKeys      ApiKey[]
   auditLogs      AuditLog[]
   tickets        Ticket[]
@@ -125,7 +126,8 @@ model Order {
 
   user         User          @relation(fields: [userId], references: [id])
   service      Service       @relation(fields: [serviceId], references: [id])
-  transactions Transaction[]
+  transactions   Transaction[]
+  refillRequests RefillRequest[]
 
   @@index([userId])
   @@index([serviceId])
