@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { SignUpForm } from "./signup-form";
 
-export default function SignUpPage() {
+export function SignUpForm() {
   return <Suspense><SignUpForm /></Suspense>;
 }
