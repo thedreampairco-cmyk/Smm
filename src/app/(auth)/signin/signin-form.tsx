@@ -23,12 +23,15 @@ export function SignInForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
+
     const result = await signIn("credentials", {
       email: form.email,
       password: form.password,
       redirect: false,
     });
+
     setLoading(false);
+
     if (result?.error) {
       toast({ title: "Sign in failed", description: "Invalid email or password.", variant: "destructive" });
     } else {
@@ -43,12 +46,16 @@ export function SignInForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0f0f0f] px-4 py-16">
+      {/* Background glow */}
       <div
         className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none opacity-20"
         style={{ background: "radial-gradient(ellipse, rgba(212,175,55,0.4) 0%, transparent 70%)", filter: "blur(80px)" }}
       />
+
       <div className="w-full max-w-md relative">
+        {/* Card */}
         <div className="rounded-2xl border border-white/[0.08] bg-[#111] p-8">
+          {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-2 mb-6 group">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/30">
@@ -60,13 +67,16 @@ export function SignInForm() {
             <p className="text-white/40 text-sm mt-1">Sign in to your account</p>
           </div>
 
+          {/* Google */}
           <Button
             onClick={handleGoogle}
             disabled={googleLoading}
             variant="outline"
             className="w-full border-white/10 hover:bg-white/5 text-white/80 hover:text-white mb-5 h-11"
           >
-            {googleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (
+            {googleLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
               <>
                 <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -89,45 +99,67 @@ export function SignInForm() {
             <div>
               <Label htmlFor="email" className="text-white/60 text-sm mb-1.5 block">Email</Label>
               <Input
-                id="email" type="email" placeholder="you@example.com"
-                value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
                 className="bg-[#0f0f0f] border-white/10 text-white placeholder:text-white/25 focus:border-amber-500/50 h-11"
               />
             </div>
+
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <Label htmlFor="password" className="text-white/60 text-sm">Password</Label>
-                <Link href="/forgot-password" className="text-xs text-amber-400 hover:text-amber-300">Forgot password?</Link>
+                <Link href="/forgot-password" className="text-xs text-amber-400 hover:text-amber-300">
+                  Forgot password?
+                </Link>
               </div>
               <div className="relative">
                 <Input
-                  id="password" type={showPw ? "text" : "password"} placeholder="••••••••"
-                  value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  id="password"
+                  type={showPw ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
                   required
                   className="bg-[#0f0f0f] border-white/10 text-white placeholder:text-white/25 focus:border-amber-500/50 h-11 pr-11"
                 />
-                <button type="button" onClick={() => setShowPw(!showPw)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60">
+                <button
+                  type="button"
+                  onClick={() => setShowPw(!showPw)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60"
+                >
                   {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
+
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" checked={form.remember}
+              <input
+                type="checkbox"
+                checked={form.remember}
                 onChange={(e) => setForm({ ...form, remember: e.target.checked })}
-                className="rounded border-white/20 bg-[#0f0f0f]" />
+                className="rounded border-white/20 bg-[#0f0f0f]"
+              />
               <span className="text-sm text-white/50">Remember me</span>
             </label>
-            <Button type="submit" disabled={loading}
-              className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 mt-1">
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold h-11 mt-1"
+            >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign In"}
             </Button>
           </form>
 
           <p className="text-center text-sm text-white/40 mt-6">
             Don't have an account?{" "}
-            <Link href="/signup" className="text-amber-400 hover:text-amber-300 font-medium">Sign up free</Link>
+            <Link href="/signup" className="text-amber-400 hover:text-amber-300 font-medium">
+              Sign up free
+            </Link>
           </p>
         </div>
       </div>
