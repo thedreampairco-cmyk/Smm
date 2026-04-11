@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { ArrowRight, Zap, Shield, Clock, TrendingUp, Star, Users, CheckCircle2, RefreshCw, Headphones, BarChart3 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // src/app/admin/layout.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
