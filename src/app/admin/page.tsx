@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // src/app/admin/page.tsx
 import { prisma } from "@/lib/prisma";
 import { TrendingUp, ShoppingBag, Users, Clock, DollarSign } from "lucide-react";

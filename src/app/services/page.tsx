@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // src/app/services/page.tsx
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/navbar";

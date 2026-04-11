@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // src/app/admin/tickets/page.tsx
 import { prisma } from "@/lib/prisma";
 import { AdminTicketsClient } from "./admin-tickets-client";

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // src/app/admin/users/page.tsx
 import { prisma } from "@/lib/prisma";
 export const metadata = { title: "Manage Users" };

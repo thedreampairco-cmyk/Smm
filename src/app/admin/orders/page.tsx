@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 // src/app/admin/orders/page.tsx
 import { prisma } from "@/lib/prisma";
 import { AdminOrdersClient } from "@/components/admin/admin-orders-client";
