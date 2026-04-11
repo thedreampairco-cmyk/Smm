@@ -1,3 +1,4 @@
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -26,37 +27,23 @@ enum TransactionType {
   REFUND
 }
 
-enum TicketStatus {
-  OPEN
-  IN_PROGRESS
-  RESOLVED
-  CLOSED
-}
-
-enum TicketPriority {
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
-}
-
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  passwordHash  String?
-  name          String?
-  image         String?
-  role          Role      @default(USER)
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String?
+  name         String?
+  image        String?
+  role         Role          @default(USER)
   emailVerified DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
-  accounts       Account[]
-  sessions       Session[]
-  orders         Order[]
-  wallet         Wallet?
-  transactions   Transaction[]
-  apiKeys        ApiKey[]
+  accounts     Account[]
+  sessions     Session[]
+  orders       Order[]
+  wallet       Wallet?
+  transactions Transaction[]
+  apiKeys      ApiKey[]
   auditLogs      AuditLog[]
   tickets        Ticket[]
   ticketMessages TicketMessage[]
@@ -109,7 +96,7 @@ model Service {
   name        String
   category    String
   description String   @db.Text
-  rate        Float
+  rate        Float    // price per 1000 units
   minQuantity Int
   maxQuantity Int
   isActive    Boolean  @default(true)
@@ -135,8 +122,8 @@ model Order {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
 
-  user           User            @relation(fields: [userId], references: [id])
-  service        Service         @relation(fields: [serviceId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
+  service      Service       @relation(fields: [serviceId], references: [id])
   transactions   Transaction[]
   refillRequests RefillRequest[]
 
@@ -150,7 +137,7 @@ model Wallet {
   id        String   @id @default(cuid())
   userId    String   @unique
   balance   Float    @default(0)
-  currency  String   @default("INR")
+  currency  String   @default("USD")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -165,7 +152,7 @@ model Transaction {
   orderId         String?
   type            TransactionType
   amount          Float
-  currency        String          @default("INR")
+  currency        String          @default("USD")
   stripePaymentId String?
   description     String
   createdAt       DateTime        @default(now())
@@ -207,6 +194,20 @@ model AuditLog {
   @@index([userId])
   @@index([entity])
   @@index([createdAt])
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
 }
 
 model Ticket {

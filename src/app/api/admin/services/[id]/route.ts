@@ -1,3 +1,4 @@
+// src/app/api/admin/services/[id]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -18,45 +19,44 @@ const schema = z.object({
   isActive: z.boolean().optional(),
 });
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await isAdmin();
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const { id } = await params;
   const body = await req.json();
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
 
-  const service = await prisma.service.update({ where: { id }, data: parsed.data });
+  const service = await prisma.service.update({
+    where: { id: params.id },
+    data: parsed.data,
+  });
 
   await prisma.auditLog.create({
     data: {
       userId: session.user!.id!,
-      action: "UPDATE", entity: "Service",
-      entityId: service.id, details: parsed.data as any,
+      action: "UPDATE",
+      entity: "Service",
+      entityId: service.id,
+      details: parsed.data as any,
     },
   });
 
   return NextResponse.json({ service });
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
   const session = await isAdmin();
   if (!session) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const { id } = await params;
-  await prisma.service.delete({ where: { id } });
+  await prisma.service.delete({ where: { id: params.id } });
 
   await prisma.auditLog.create({
     data: {
       userId: session.user!.id!,
-      action: "DELETE", entity: "Service", entityId: id,
+      action: "DELETE",
+      entity: "Service",
+      entityId: params.id,
     },
   });
 

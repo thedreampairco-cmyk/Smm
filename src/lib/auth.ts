@@ -1,3 +1,4 @@
+// src/lib/auth.ts
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
@@ -14,7 +15,6 @@ const signInSchema = z.object({
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
-  trustHost: true,
   pages: {
     signIn: "/signin",
     error: "/signin",
@@ -36,6 +36,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const valid = await bcrypt.compare(password, user.passwordHash);
         if (!valid) return null;
 
+        // Ensure wallet exists
         await prisma.wallet.upsert({
           where: { userId: user.id },
           update: {},
@@ -64,6 +65,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   events: {
     async createUser({ user }) {
+      // Auto-create wallet for new OAuth users
       await prisma.wallet.upsert({
         where: { userId: user.id! },
         update: {},
