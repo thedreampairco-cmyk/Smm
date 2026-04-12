@@ -1,10 +1,11 @@
-export const dynamic = "force-dynamic";
+import { unstable_noStore as noStore } from "next/cache";
 // src/app/admin/orders/page.tsx
 import { prisma } from "@/lib/prisma";
 import { AdminOrdersClient } from "@/components/admin/admin-orders-client";
 export const metadata = { title: "Manage Orders" };
 
 export default async function AdminOrdersPage() {
+  noStore();
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: "desc" },
     take: 100,

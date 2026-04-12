@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+import { unstable_noStore as noStore } from "next/cache";
 // src/app/wallet/page.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -10,6 +10,7 @@ import { WalletClient } from "./wallet-client";
 export const metadata = { title: "Wallet" };
 
 export default async function WalletPage() {
+  noStore();
   const session = await auth();
   if (!session?.user?.id) redirect("/signin?callbackUrl=/wallet");
 

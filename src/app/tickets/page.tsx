@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+import { unstable_noStore as noStore } from "next/cache";
 // src/app/tickets/page.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -10,6 +10,7 @@ import { TicketsClient } from "./tickets-client";
 export const metadata = { title: "Support Tickets" };
 
 export default async function TicketsPage() {
+  noStore();
   const session = await auth();
   if (!session?.user?.id) redirect("/signin?callbackUrl=/tickets");
 

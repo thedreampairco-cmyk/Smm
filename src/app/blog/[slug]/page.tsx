@@ -4,12 +4,14 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 const posts: Record<string, { title: string; date: string; category: string; body: string[] }> = {
   "what-is-smm-panel": {
     title: "What is an SMM Panel and How Does It Work?",
     date: "April 10, 2026", category: "Guide",
     body: [
-      "An SMM (Social Media Marketing) Panel is an online platform where individuals and businesses purchase social media engagement services like followers, likes, and views at wholesale prices.",
+      "An SMM Panel is an online platform where individuals and businesses purchase social media engagement services like followers, likes, and views at wholesale prices.",
       "When you place an order, the panel connects to a network of providers and delivers engagement gradually using drip-feed technology — making growth look organic and safe.",
       "SMM panels are used by content creators, businesses, digital agencies, and resellers. Our 365-day refill guarantee ensures your numbers stay stable long-term.",
     ],
@@ -27,7 +29,7 @@ const posts: Record<string, { title: string; date: string; category: string; bod
     title: "How to Add Funds via UPI Safely",
     date: "April 5, 2026", category: "Payments",
     body: [
-      "Adding funds via UPI is instant and free. Login → Wallet → Add Funds → Enter amount → Pay with Google Pay, PhonePe, or Paytm on the Razorpay checkout.",
+      "Adding funds via UPI is instant and free. Login to your account, go to Wallet, click Add Funds, enter your amount, and pay with Google Pay, PhonePe, or Paytm.",
       "Always verify the URL is your panel domain before paying. Never share your UPI PIN with anyone. Keep payment receipts for reference.",
     ],
   },
@@ -36,7 +38,7 @@ const posts: Record<string, { title: string; date: string; category: string; bod
     date: "April 2, 2026", category: "Telegram",
     body: [
       "Telegram is booming in India. Start with 500-1000 members to create credibility — empty channels rarely get organic joins.",
-      "Post valuable content daily: tips, news, exclusive deals. Use our Telegram services: Channel Members from ₹12/1000, Post Views from ₹0.5/1000.",
+      "Post valuable content daily: tips, news, exclusive deals. Use our Telegram services: Channel Members from Rs 12/1000, Post Views from Rs 0.5/1000.",
     ],
   },
   "youtube-monetization-views": {
@@ -44,21 +46,22 @@ const posts: Record<string, { title: string; date: string; category: string; bod
     date: "March 28, 2026", category: "YouTube",
     body: [
       "For monetized channels, always choose High Retention Views — viewers watch 60-80% of your video, making it safe for the YouTube Partner Program.",
-      "Our Watch Time service at ₹180 per 100 hours is the fastest way to reach the 4,000-hour monetization requirement.",
+      "Our Watch Time service at Rs 180 per 100 hours is the fastest way to reach the 4,000-hour monetization requirement.",
     ],
   },
   "smm-reseller-guide": {
     title: "How to Start an SMM Reseller Business in India",
     date: "March 25, 2026", category: "Business",
     body: [
-      "Buy services at wholesale from our panel, sell at retail to your clients, keep the margin as profit. Example: buy Instagram followers at ₹18/1000, sell at ₹50/1000 — 177% margin.",
-      "Get your API key from the dashboard and integrate with your own website to automate orders. With 100 regular customers you can earn ₹25,000+/month.",
+      "Buy services at wholesale from our panel, sell at retail to your clients, keep the margin as profit. Example: buy Instagram followers at Rs 18/1000, sell at Rs 50/1000.",
+      "Get your API key from the dashboard and integrate with your own website to automate orders. With 100 regular customers you can earn Rs 25,000 per month.",
     ],
   },
 };
 
+// Return empty array to prevent build-time static generation
 export async function generateStaticParams() {
-  return Object.keys(posts).map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -92,7 +95,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="mt-12 p-6 rounded-2xl border border-amber-500/20 bg-amber-500/5 text-center">
             <p className="text-white font-semibold mb-2">Ready to grow your social media?</p>
             <Link href="/signup" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-6 py-2.5 rounded-xl text-sm transition-colors">
-              Get Started Free →
+              Get Started Free
             </Link>
           </div>
         </div>

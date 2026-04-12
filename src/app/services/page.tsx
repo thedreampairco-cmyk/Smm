@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+import { unstable_noStore as noStore } from "next/cache";
 // src/app/services/page.tsx
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/layout/navbar";
@@ -8,6 +8,7 @@ import { ServicesClient } from "@/components/services/services-client";
 export const metadata = { title: "Services" };
 
 export default async function ServicesPage() {
+  noStore();
   const services = await prisma.service.findMany({
     where: { isActive: true },
     orderBy: { popularity: "desc" },
