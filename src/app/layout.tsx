@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,8 +12,7 @@ export const metadata: Metadata = {
     default: "SMM Panel Pro — India's #1 Social Media Marketing Panel",
     template: "%s | SMM Panel Pro",
   },
-  description: "Best SMM Panel India. Buy Instagram followers, YouTube views, Telegram members, TikTok likes. From ₹3/1000. Instant UPI. 365-day refill guarantee.",
-  keywords: ["SMM panel India","buy Instagram followers","buy YouTube views","cheapest SMM panel","UPI SMM panel"],
+  description: "Best SMM Panel India. Buy Instagram followers, YouTube views, Telegram members. From Rs 3/1000. Instant UPI. 365-day refill guarantee.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
