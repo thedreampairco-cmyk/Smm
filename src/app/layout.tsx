@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
@@ -10,24 +9,13 @@ export const metadata: Metadata = {
     default: "SMM Panel Pro — India's #1 Social Media Marketing Panel",
     template: "%s | SMM Panel Pro",
   },
-  description:
-    "Best SMM Panel India. Buy Instagram followers, YouTube views, Telegram members, TikTok likes & more. Services from ₹3/1000. Instant UPI payments. 365-day refill guarantee.",
-  keywords: ["SMM panel India", "buy Instagram followers", "buy YouTube views", "cheapest SMM panel", "Indian SMM panel", "UPI SMM panel"],
-  openGraph: {
-    title: "SMM Panel Pro — India's #1 SMM Panel",
-    description: "Premium Social Media Marketing Services from ₹3/1000",
-    type: "website",
-  },
+  description: "Best SMM Panel India. Buy Instagram followers, YouTube views, Telegram members, TikTok likes. From ₹3/1000. Instant UPI. 365-day refill guarantee.",
+  keywords: ["SMM panel India","buy Instagram followers","buy YouTube views","cheapest SMM panel","UPI SMM panel"],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        
-        
-        
-      </head>
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-[#0f0f0f] text-white antialiased">
         <Providers>
           {children}

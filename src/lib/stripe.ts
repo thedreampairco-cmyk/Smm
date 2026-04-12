@@ -1,14 +1,4 @@
-// src/lib/stripe.ts
-import Stripe from "stripe";
-
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
-  typescript: true,
-});
-
-export function formatAmount(amount: number, currency = "usd"): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency.toUpperCase(),
-  }).format(amount);
+export const stripe = null;
+export function formatAmount(amount: number, currency = "inr"): string {
+  return new Intl.NumberFormat("en-IN", { style: "currency", currency: currency.toUpperCase() }).format(amount);
 }

@@ -2,10 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { validateApiKey, apiSuccess, apiError } from "@/lib/api-auth";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ orderId: string }> }
-) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ orderId: string }> }) {
   const { error, user } = await validateApiKey(req);
   if (error) return error;
   const { orderId } = await params;
