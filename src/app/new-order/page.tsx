@@ -1,4 +1,4 @@
-import { unstable_noStore as noStore } from "next/cache";
+export const dynamic = "force-dynamic";
 // src/app/new-order/page.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -10,7 +10,6 @@ import { NewOrderClient } from "./new-order-client";
 export const metadata = { title: "New Order" };
 
 export default async function NewOrderPage() {
-  noStore();
   const session = await auth();
   if (!session?.user?.id) redirect("/signin?callbackUrl=/new-order");
 

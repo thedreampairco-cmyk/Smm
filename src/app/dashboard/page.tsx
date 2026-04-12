@@ -1,4 +1,4 @@
-import { unstable_noStore as noStore } from "next/cache";
+export const dynamic = "force-dynamic";
 // src/app/dashboard/page.tsx
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
@@ -10,7 +10,6 @@ import { DashboardClient } from "@/components/dashboard/dashboard-client";
 export const metadata = { title: "Dashboard" };
 
 export default async function DashboardPage() {
-  noStore();
   const session = await auth();
   if (!session?.user?.id) redirect("/signin?callbackUrl=/dashboard");
 

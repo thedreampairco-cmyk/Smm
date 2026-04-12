@@ -1,10 +1,9 @@
-import { unstable_noStore as noStore } from "next/cache";
+export const dynamic = "force-dynamic";
 // src/app/admin/users/page.tsx
 import { prisma } from "@/lib/prisma";
 export const metadata = { title: "Manage Users" };
 
 export default async function AdminUsersPage() {
-  noStore();
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: { wallet: true, _count: { select: { orders: true } } },

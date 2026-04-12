@@ -1,6 +1,3 @@
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";

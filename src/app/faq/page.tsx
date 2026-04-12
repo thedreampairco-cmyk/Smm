@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 // src/app/faq/page.tsx
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";

@@ -1,4 +1,4 @@
-import { unstable_noStore as noStore } from "next/cache";
+export const dynamic = "force-dynamic";
 // src/app/admin/page.tsx
 import { prisma } from "@/lib/prisma";
 import { TrendingUp, ShoppingBag, Users, Clock, DollarSign } from "lucide-react";
@@ -6,7 +6,6 @@ import { TrendingUp, ShoppingBag, Users, Clock, DollarSign } from "lucide-react"
 export const metadata = { title: "Admin Dashboard" };
 
 export default async function AdminDashboardPage() {
-  noStore();
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
