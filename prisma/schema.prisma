@@ -7,11 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role           { USER ADMIN }
-enum OrderStatus    { PENDING IN_PROGRESS COMPLETED PARTIAL CANCELLED }
-enum TransactionType { DEPOSIT ORDER_PAYMENT REFUND }
-enum TicketStatus   { OPEN IN_PROGRESS RESOLVED CLOSED }
-enum TicketPriority { LOW MEDIUM HIGH URGENT }
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  PARTIAL
+  CANCELLED
+}
+
+enum TransactionType {
+  DEPOSIT
+  ORDER_PAYMENT
+  REFUND
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
 
 model User {
   id            String    @id @default(cuid())
@@ -53,6 +80,7 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
   @@index([userId])
 }
@@ -63,6 +91,7 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }
 
@@ -70,6 +99,7 @@ model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
+
   @@unique([identifier, token])
 }
 
@@ -85,7 +115,9 @@ model Service {
   popularity  Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  orders      Order[]
+
+  orders Order[]
+
   @@index([category])
   @@index([isActive])
 }
@@ -101,10 +133,12 @@ model Order {
   notes          String?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
-  user           User          @relation(fields: [userId], references: [id])
-  service        Service       @relation(fields: [serviceId], references: [id])
+
+  user           User            @relation(fields: [userId], references: [id])
+  service        Service         @relation(fields: [serviceId], references: [id])
   transactions   Transaction[]
   refillRequests RefillRequest[]
+
   @@index([userId])
   @@index([serviceId])
   @@index([status])
@@ -118,7 +152,9 @@ model Wallet {
   currency  String   @default("INR")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
 }
 
@@ -132,8 +168,10 @@ model Transaction {
   stripePaymentId String?
   description     String
   createdAt       DateTime        @default(now())
-  user            User   @relation(fields: [userId], references: [id])
-  order           Order? @relation(fields: [orderId], references: [id])
+
+  user  User   @relation(fields: [userId], references: [id])
+  order Order? @relation(fields: [orderId], references: [id])
+
   @@index([userId])
   @@index([type])
   @@index([createdAt])
@@ -147,7 +185,9 @@ model ApiKey {
   lastUsed  DateTime?
   isActive  Boolean   @default(true)
   createdAt DateTime  @default(now())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([key])
   @@index([userId])
 }
@@ -160,7 +200,9 @@ model AuditLog {
   entityId  String
   details   Json?
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+
+  user User @relation(fields: [userId], references: [id])
+
   @@index([userId])
   @@index([entity])
   @@index([createdAt])
@@ -175,8 +217,10 @@ model Ticket {
   orderId   String?
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  user      User            @relation(fields: [userId], references: [id])
-  messages  TicketMessage[]
+
+  user     User            @relation(fields: [userId], references: [id])
+  messages TicketMessage[]
+
   @@index([userId])
   @@index([status])
 }
@@ -188,8 +232,10 @@ model TicketMessage {
   message   String   @db.Text
   isAdmin   Boolean  @default(false)
   createdAt DateTime @default(now())
-  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [userId], references: [id])
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id])
+
   @@index([ticketId])
 }
 
@@ -200,8 +246,10 @@ model RefillRequest {
   status    String   @default("PENDING")
   reason    String?
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  order     Order    @relation(fields: [orderId], references: [id])
+
+  user  User  @relation(fields: [userId], references: [id])
+  order Order @relation(fields: [orderId], references: [id])
+
   @@index([userId])
   @@index([orderId])
 }
@@ -210,5 +258,6 @@ model Newsletter {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
+
   @@index([email])
 }
